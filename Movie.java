@@ -82,6 +82,37 @@ class Rental {
   public Movie getMovie() {
     return _movie;
   }
+  
+  double getCharge(){
+	double result = 0;
+    switch(getMovie().getPriceCode()){   //®æ
+        case Movie.REGULAR:                     //
+          result += 2;
+          if(getDaysRented()>2)
+            result += (getDaysRented()-2)*1.5;
+          break;
+
+        case Movie.NEW_RELEASE:         //
+          result += getDaysRented()*3;
+          break;
+
+        case Movie.CHILDRENS:           //
+          result += 1.5;
+          if(getDaysRented()>3)
+            result += (getDaysRented()-3)*1.5;
+          break;
+      }
+	return result;
+  }
+  int getFrequentRenterPoints(){
+      if ((getMovie().getPriceCode() == Movie.NEW_RELEASE) &&
+         getDaysRented() > 1){
+        return 2;
+	  }
+	  else{
+		return 1;
+	  }
+  }
 }
 
 class Customer {
@@ -107,22 +138,13 @@ class Customer {
     String result = "Rental Record for " + getName() + "\n";
 
     while(rentals.hasMoreElements()){
-      double thisAmount = 0;
       Rental each = (Rental) rentals.nextElement(); //
-
-	  thisAmount = amountFor(each);
-	  
-      // add frequent renter points¡^
-      frequentRenterPoints ++;
-      // add bonus for a two day new release rental
-      if ((each.getMovie().getPriceCode() == Movie.NEW_RELEASE) &&
-         each.getDaysRented() > 1)
-        frequentRenterPoints ++;
+	  frequentRenterPoints += each.getFrequentRenterPoints();
 
       // show figures for this rental®Æ¡^
       result += "\t" + each.getMovie().getTitle() + "\t" +
-          String.valueOf(thisAmount) + "\n";
-      totalAmount += thisAmount;
+          String.valueOf(each.getCharge()) + "\n";
+      totalAmount += each.getCharge();
     }
 
     // add footer lines¡^
@@ -130,27 +152,5 @@ class Customer {
     result += "You earned " + String.valueOf(frequentRenterPoints) +
             " frequent renter points";
     return result;
-  }
-  
-  private double amountFor(Rental aRental){
-	double thisAmount = 0;
-    switch(aRental.getMovie().getPriceCode()){   //®æ
-        case Movie.REGULAR:                     //
-          thisAmount += 2;
-          if(aRental.getDaysRented()>2)
-            thisAmount += (aRental.getDaysRented()-2)*1.5;
-          break;
-
-        case Movie.NEW_RELEASE:         //
-          thisAmount += aRental.getDaysRented()*3;
-          break;
-
-        case Movie.CHILDRENS:           //
-          thisAmount += 1.5;
-          if(aRental.getDaysRented()>3)
-            thisAmount += (aRental.getDaysRented()-3)*1.5;
-          break;
-      }
-	return thisAmount;
   }
 }
