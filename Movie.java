@@ -27,6 +27,37 @@ public class Movie {
       return _title;
   }
 
+  double getCharge(int daysRented){
+	double result = 0;
+    switch(getPriceCode()){   //®æ
+        case Movie.REGULAR:                     //
+          result += 2;
+          if(daysRented>2)
+            result += (daysRented-2)*1.5;
+          break;
+
+        case Movie.NEW_RELEASE:         //
+          result += daysRented*3;
+          break;
+
+        case Movie.CHILDRENS:           //
+          result += 1.5;
+          if(daysRented>3)
+            result += (daysRented-3)*1.5;
+          break;
+      }
+	return result;
+  }
+  
+  int getFrequentRenterPoints(int daysRented){
+      if ((getPriceCode() == Movie.NEW_RELEASE) && daysRented > 1){
+        return 2;
+	  }
+	  else{
+		return 1;
+	  }
+  }
+  
   // jjhou add
   public static void main(String[] args) {
       System.out.println("Refactoring, a First Example, step1");
@@ -84,34 +115,10 @@ class Rental {
   }
   
   double getCharge(){
-	double result = 0;
-    switch(getMovie().getPriceCode()){   //®æ
-        case Movie.REGULAR:                     //
-          result += 2;
-          if(getDaysRented()>2)
-            result += (getDaysRented()-2)*1.5;
-          break;
-
-        case Movie.NEW_RELEASE:         //
-          result += getDaysRented()*3;
-          break;
-
-        case Movie.CHILDRENS:           //
-          result += 1.5;
-          if(getDaysRented()>3)
-            result += (getDaysRented()-3)*1.5;
-          break;
-      }
-	return result;
+	return _movie.getCharge(_daysRented);
   }
   int getFrequentRenterPoints(){
-      if ((getMovie().getPriceCode() == Movie.NEW_RELEASE) &&
-         getDaysRented() > 1){
-        return 2;
-	  }
-	  else{
-		return 1;
-	  }
+      return _movie.getFrequentRenterPoints(_daysRented);
   }
 }
 
