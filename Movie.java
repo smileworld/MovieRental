@@ -12,7 +12,7 @@ public class Movie {
 
   public Movie(String title, int priceCode){
       _title = title;
-      _priceCode = priceCode;
+      setPriceCode(priceCode);
   }
 
    public int getPriceCode() {
@@ -97,6 +97,24 @@ public class Movie {
   }
 }
 
+abstract class Price{
+  abstract int getPriceCode();
+}
+class ChildrensPrice extends Price{
+  int getPriceCode(){
+	return Movie.CHILDRENS;
+  }
+}
+class NewReleasePrice extends Price{
+  int getPriceCode(){
+	return Movie.NEW_RELEASE;
+  }
+}
+class RegularPrice extends Price{
+  int getPriceCode(){
+	return Movie.REGULAR;
+  }
+}
 class Rental {
   private Movie _movie;         //
   private int _daysRented;              //
