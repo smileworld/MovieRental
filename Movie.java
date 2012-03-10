@@ -132,7 +132,6 @@ class Customer {
   }
 
   public String statement() {
-    double totalAmount = 0;                     //
     int frequentRenterPoints = 0;       //
     Enumeration rentals = _rentals.elements();
     String result = "Rental Record for " + getName() + "\n";
@@ -144,13 +143,22 @@ class Customer {
       // show figures for this rental®Æ¡^
       result += "\t" + each.getMovie().getTitle() + "\t" +
           String.valueOf(each.getCharge()) + "\n";
-      totalAmount += each.getCharge();
     }
 
     // add footer lines¡^
-    result += "Amount owed is " + String.valueOf(totalAmount) + "\n";
+    result += "Amount owed is " + String.valueOf(getTotalCharge()) + "\n";
     result += "You earned " + String.valueOf(frequentRenterPoints) +
             " frequent renter points";
     return result;
+  }
+  
+  private double getTotalCharge(){
+	double result = 0;
+	Enumeration rentals = _rentals.elements();
+	while(rentals.hasMoreElements()){
+		Rental each = (Rental) rentals.nextElement();
+		result += each.getCharge();
+	}
+	return result;
   }
 }
